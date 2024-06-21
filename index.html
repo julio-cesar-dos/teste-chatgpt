@@ -40,8 +40,12 @@
         .container button:hover {
             background-color: #0056b3;
         }
-        .container p {
-            font-size: 16px;
+        .container pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            white-space: pre-wrap; /* Para garantir que o texto será quebrado corretamente */
         }
     </style>
 </head>
@@ -50,7 +54,7 @@
         <h2>Consultar CPF</h2>
         <input type="text" id="cpf" placeholder="Digite seu CPF (sem pontos ou traços)" />
         <button onclick="consultarCPF()">Consultar</button>
-        <p id="mensagem"></p>
+        <pre id="mensagem"></pre>
     </div>
 
     <script>
@@ -73,14 +77,9 @@
                 // Extrair conteúdo do <pre>
                 const preContent = textData.match(/<pre[^>]*>([\s\S]*?)<\/pre>/);
                 if (preContent && preContent[1]) {
-                    const jsonData = JSON.parse(preContent[1]);
-                    if (jsonData.status === 200) {
-                        mensagem.style.color = 'green';
-                        mensagem.textContent = `Olá, ${jsonData.dadosBasicos.nome}`;
-                    } else {
-                        mensagem.style.color = 'red';
-                        mensagem.textContent = 'CPF não encontrado ou inválido.';
-                    }
+                    // Exibir conteúdo do <pre> no elemento <pre> da página
+                    mensagem.style.color = 'black';
+                    mensagem.textContent = preContent[1];
                 } else {
                     mensagem.style.color = 'red';
                     mensagem.textContent = 'Ocorreu um erro ao processar a resposta da API.';
