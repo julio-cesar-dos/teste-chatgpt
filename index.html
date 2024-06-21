@@ -74,9 +74,9 @@
                 const preContent = textData.match(/<pre[^>]*>([\s\S]*?)<\/pre>/);
                 if (preContent && preContent[1]) {
                     const jsonData = JSON.parse(preContent[1]);
-                    if (jsonData.status === 'success') {
+                    if (jsonData.status === 200) {
                         mensagem.style.color = 'green';
-                        mensagem.textContent = `Olá, ${jsonData.nome}`;
+                        mensagem.textContent = `Olá, ${jsonData.dadosBasicos.nome}`;
                     } else {
                         mensagem.style.color = 'red';
                         mensagem.textContent = 'CPF não encontrado ou inválido.';
