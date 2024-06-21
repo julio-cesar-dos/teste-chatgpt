@@ -40,6 +40,10 @@
         .container button:hover {
             background-color: #0056b3;
         }
+        .container p {
+            font-size: 16px;
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -52,10 +56,11 @@
 
     <script>
         async function consultarCPF() {
-            const cpf = document.getElementById('cpf').value;
+            const cpf = document.getElementById('cpf').value.trim();
             const mensagem = document.getElementById('mensagem');
 
-            if (cpf.length !== 11 || isNaN(cpf)) {
+            // Validar se o CPF tem 11 dígitos e é numérico
+            if (!/^\d{11}$/.test(cpf)) {
                 mensagem.textContent = 'Por favor, digite um CPF válido (11 dígitos, somente números).';
                 return;
             }
@@ -66,12 +71,15 @@
                 const response = await fetch(apiURL);
                 const data = await response.json();
 
-                if (data.status === 'success') {
+                if (response.ok && data.status === 'success') {
+                    mensagem.style.color = 'green';
                     mensagem.textContent = `Olá, ${data.nome}`;
                 } else {
+                    mensagem.style.color = 'red';
                     mensagem.textContent = 'CPF não encontrado ou inválido.';
                 }
             } catch (error) {
+                mensagem.style.color = 'red';
                 mensagem.textContent = 'Ocorreu um erro ao consultar o CPF. Tente novamente mais tarde.';
                 console.error('Erro:', error);
             }
