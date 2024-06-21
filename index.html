@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta CPF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .container input {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .container button {
+            padding: 10px;
+            font-size: 16px;
+            width: 100%;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Consultar CPF</h2>
+        <input type="text" id="cpf" placeholder="Digite seu CPF (sem pontos ou traços)" />
+        <button onclick="consultarCPF()">Consultar</button>
+        <p id="mensagem"></p>
+    </div>
+
+    <script>
+        async function consultarCPF() {
+            const cpf = document.getElementById('cpf').value;
+            const mensagem = document.getElementById('mensagem');
+
+            if (cpf.length !== 11 || isNaN(cpf)) {
+                mensagem.textContent = 'Por favor, digite um CPF válido (11 dígitos, somente números).';
+                return;
+            }
+
+            const apiURL = `https://databit.online/api?token=987e448b-fb5c-4090-bf70-e80b0cdc1e00&type=cpftype&query=${cpf}`;
+
+            try {
+                const response = await fetch(apiURL);
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    mensagem.textContent = `Olá, ${data.nome}`;
+                } else {
+                    mensagem.textContent = 'CPF não encontrado ou inválido.';
+                }
+            } catch (error) {
+                mensagem.textContent = 'Ocorreu um erro ao consultar o CPF. Tente novamente mais tarde.';
+                console.error('Erro:', error);
+            }
+        }
+    </script>
+</body>
+</html>
