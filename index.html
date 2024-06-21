@@ -42,7 +42,6 @@
         }
         .container p {
             font-size: 16px;
-            color: red;
         }
     </style>
 </head>
@@ -69,14 +68,22 @@
 
             try {
                 const response = await fetch(apiURL);
-                const data = await response.json();
+                const textData = await response.text();
 
-                if (response.ok && data.status === 'success') {
-                    mensagem.style.color = 'green';
-                    mensagem.textContent = `Olá, ${data.nome}`;
+                // Extrair conteúdo do <pre>
+                const preContent = textData.match(/<pre[^>]*>([\s\S]*?)<\/pre>/);
+                if (preContent && preContent[1]) {
+                    const jsonData = JSON.parse(preContent[1]);
+                    if (jsonData.status === 'success') {
+                        mensagem.style.color = 'green';
+                        mensagem.textContent = `Olá, ${jsonData.nome}`;
+                    } else {
+                        mensagem.style.color = 'red';
+                        mensagem.textContent = 'CPF não encontrado ou inválido.';
+                    }
                 } else {
                     mensagem.style.color = 'red';
-                    mensagem.textContent = 'CPF não encontrado ou inválido.';
+                    mensagem.textContent = 'Ocorreu um erro ao processar a resposta da API.';
                 }
             } catch (error) {
                 mensagem.style.color = 'red';
